@@ -14,6 +14,39 @@ function generateUUID() { // Public Domain/MIT
   });
 }
 
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for (var i = 0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function obtainTrackerId() {
+  var user_tracker_id = getCookie("user_tracker_id");
+  if (user_tracker_id === "") {
+    // Generate tracker id if needed
+    user_tracker_id = generateUUID();
+  }
+  // Extend expire time
+  setCookie("user_tracker_id", user_tracker_id, 365);
+  return user_tracker_id
+}
 
 (function(global) {
   "use strict";
@@ -43,7 +76,7 @@ function generateUUID() { // Public Domain/MIT
     const level = level_retain || DEFAULT_LOG_LEVEL;
     const flush_interval = interval || DEFAULT_FLUSH_INTERVAL;
 
-    const trackerId = generateUUID()
+    const trackerId = obtainTrackerId()
 
     var $logger = beaver.Logger({
       // Url to send logs to
