@@ -38,13 +38,13 @@ function getCookie(cname) {
 }
 
 function obtainTrackerId() {
-  var user_tracker_id = getCookie("user_tracker_id");
+  var user_tracker_id = getCookie("UserTrackerID");
   if (user_tracker_id === "") {
     // Generate tracker id if needed
     user_tracker_id = generateUUID();
   }
   // Extend expire time
-  setCookie("user_tracker_id", user_tracker_id, 365);
+  setCookie("UserTrackerID", user_tracker_id, 365);
   return user_tracker_id
 }
 
