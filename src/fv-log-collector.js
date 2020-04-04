@@ -14,37 +14,18 @@ function generateUUID() { // Public Domain/MIT
   });
 }
 
-function setCookie(cname, cvalue, exdays) {
-  var d = new Date();
-  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-  var expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
 
-function getCookie(cname) {
-  var name = cname + "=";
-  var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(';');
-  for (var i = 0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
+
+
 
 function obtainTrackerId() {
-  var user_tracker_id = getCookie("UserTrackerID");
-  if (user_tracker_id === "") {
+  var user_tracker_id = localStorage.getItem('UserTrackerID')
+  if (user_tracker_id == null) {
     // Generate tracker id if needed
     user_tracker_id = generateUUID();
+    localStorage.setItem('UserTrackerID', user_tracker_id)
   }
-  // Extend expire time
-  setCookie("UserTrackerID", user_tracker_id, 365);
+
   return user_tracker_id
 }
 
